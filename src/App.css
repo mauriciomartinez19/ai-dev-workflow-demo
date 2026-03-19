@@ -177,6 +177,14 @@ select:focus-visible {
   background: var(--surface);
   box-shadow: var(--lift);
   animation: fade-in 520ms ease-out both;
+  transition: border-color 160ms ease, box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.column.drop-target {
+  border-color: rgba(14, 87, 125, 0.5);
+  background: rgba(230, 246, 255, 0.65);
+  box-shadow: 0 10px 26px rgba(14, 87, 125, 0.12);
 }
 
 .column h2 {
@@ -192,13 +200,19 @@ select:focus-visible {
   gap: 0.7rem;
 }
 
-.column li {
+.task-card {
   border: 1px solid var(--line);
   border-radius: 0.8rem;
   padding: 0.7rem;
   background: #fff;
   display: grid;
   gap: 0.35rem;
+  cursor: grab;
+}
+
+.task-card.is-dragging {
+  opacity: 0.45;
+  cursor: grabbing;
 }
 
 .task-title {

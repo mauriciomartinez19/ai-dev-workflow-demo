@@ -15,14 +15,17 @@ test('creates a task with a ticket id', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'CUST-210' })).toBeVisible()
 })
 
-test('moves a task between columns and filters by status', async ({ page }) => {
-  const select = page.locator('#task-seed-3-status')
-  await select.selectOption('in_progress')
+test('moves a task between columns with drag and drop', async ({ page }) => {
+  const draggedTask = page.getByTestId('task-card-task-seed-3')
+  const doneColumn = page.getByTestId('column-done')
 
-  await page.getByRole('button', { name: 'In Progress' }).click()
+  await draggedTask.dragTo(doneColumn)
 
+  await page.getByRole('button', { name: 'Done' }).click()
   await expect(page.getByText('Write Playwright happy-path test')).toBeVisible()
-  await expect(page.getByText('Set up repository and first commit')).toHaveCount(0)
+
+  await page.getByRole('button', { name: 'Todo' }).click()
+  await expect(page.getByText('Write Playwright happy-path test')).toHaveCount(0)
 })
 
 test('keeps created tasks after reload', async ({ page }) => {
