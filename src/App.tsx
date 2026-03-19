@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { DragEvent, FormEvent } from 'react'
 import './App.css'
 
 type TaskStatus = 'todo' | 'in_progress' | 'done'
@@ -70,6 +70,10 @@ function App() {
   const [title, setTitle] = useState('')
   const [ticketId, setTicketId] = useState('')
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all')
+  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null)
+  const [dropTargetStatus, setDropTargetStatus] = useState<TaskStatus | null>(
+    null,
+  )
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
@@ -120,6 +124,42 @@ function App() {
         task.id === taskId ? { ...task, status } : task,
       ),
     )
+  }
+
+  const startDragTask = (event: DragEvent<HTMLLIElement>, taskId: string) => {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', taskId)
+    setDraggedTaskId(taskId)
+  }
+
+  const endDragTask = () => {
+    setDraggedTaskId(null)
+    setDropTargetStatus(null)
+  }
+
+  const allowDropOnColumn = (
+    event: DragEvent<HTMLElement>,
+    status: TaskStatus,
+  ) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
+
+    if (dropTargetStatus !== status) {
+      setDropTargetStatus(status)
+    }
+  }
+
+  const dropTaskOnColumn = (event: DragEvent<HTMLElement>, status: TaskStatus) => {
+    event.preventDefault()
+
+    const taskId = event.dataTransfer.getData('text/plain') || draggedTaskId
+    if (!taskId) {
+      endDragTask()
+      return
+    }
+
+    updateTaskStatus(taskId, status)
+    endDragTask()
   }
 
   return (
@@ -193,13 +233,26 @@ function App() {
 
       <section className="board">
         {STATUS_ORDER.map((columnStatus) => (
-          <article key={columnStatus} className="column">
+          <article
+            key={columnStatus}
+            className={`column ${dropTargetStatus === columnStatus ? 'drop-target' : ''}`}
+            data-testid={`column-${columnStatus}`}
+            onDragOver={(event) => allowDropOnColumn(event, columnStatus)}
+            onDrop={(event) => dropTaskOnColumn(event, columnStatus)}
+          >
             <h2>{formatStatus(columnStatus)}</h2>
             <ul>
               {filteredTasks
                 .filter((task) => task.status === columnStatus)
                 .map((task) => (
-                  <li key={task.id}>
+                  <li
+                    key={task.id}
+                    className={`task-card ${draggedTaskId === task.id ? 'is-dragging' : ''}`}
+                    data-testid={`task-card-${task.id}`}
+                    draggable
+                    onDragStart={(event) => startDragTask(event, task.id)}
+                    onDragEnd={endDragTask}
+                  >
                     <p className="task-title">{task.title}</p>
                     <a
                       href={ticketLink(task.ticketId)}
