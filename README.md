@@ -34,14 +34,15 @@ npm run test:e2e:ui
 
 ## Demo script for the talk
 
-1. Open `tickets/CUST-101.md` and frame the goal from the acceptance criteria.
-2. Create branch `feature/CUST-101-bootstrap-board`.
+1. Open `tickets/CUST-101.md` or `tickets/CUST-102.md` and frame the goal from the acceptance criteria.
+2. Create a task branch like `feature/CUST-102-figma-to-ui`.
 3. Implement/update code with Codex assistance.
 4. Run `npm run lint`, `npm run build`, and `npm run test:e2e`.
 5. Commit with ticket reference.
-6. Push and open PR titled `CUST-101: Bootstrap Workflow Board Lite`.
-7. Add one PR comment, then address it in a second commit.
-8. Show GitHub Actions CI result from `.github/workflows/ci.yml`.
+6. Push and open a PR titled with ticket prefix (example: `CUST-102: Add Figma-to-UI workflow ticket and PR reference`).
+7. Track PR URL in the ticket (example: `https://github.com/mauriciomartinez19/ai-dev-workflow-demo/pull/xxx`).
+8. Add one PR comment, then address it in a second commit.
+9. Show GitHub Actions CI result from `.github/workflows/ci.yml`.
 
 ## GitFlow convention for this repo
 
