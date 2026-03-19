@@ -14,6 +14,7 @@ type Task = {
 }
 
 const STORAGE_KEY = 'workflow-board-lite.tasks'
+const STORAGE_WRITE_KEY = 'workflow-board-lite.task'
 
 const STATUS_LABEL: Record<TaskStatus, string> = {
   todo: 'Todo',
@@ -76,7 +77,7 @@ function App() {
   )
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
+    localStorage.setItem(STORAGE_WRITE_KEY, JSON.stringify(tasks))
   }, [tasks])
 
   const filteredTasks = useMemo(
