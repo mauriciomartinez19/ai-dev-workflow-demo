@@ -9,7 +9,7 @@ Demonstrate a fast design-to-code flow using Figma MCP and Codex on top of the W
 - Pull request is created against `main`
 
 ## PR Link
-- https://github.com/mauriciomartinez19/ai-dev-workflow-demo/pull/xxx
+- https://github.com/mauriciomartinez19/ai-dev-workflow-demo/pull/1
 
 ## Demo Notes
 - Branch: `feature/CUST-102-figma-to-ui`
