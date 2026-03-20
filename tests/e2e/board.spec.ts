@@ -33,6 +33,11 @@ test('keeps created tasks after reload', async ({ page }) => {
   await page.getByLabel('Ticket ID').fill('CUST-300')
   await page.getByRole('button', { name: 'Add task' }).click()
 
+  const storedTasks = await page.evaluate(() =>
+    localStorage.getItem('workflow-board-lite.tasks'),
+  )
+  expect(storedTasks).toContain('Prepare CI walkthrough')
+
   await page.reload()
 
   await expect(page.getByText('Prepare CI walkthrough')).toBeVisible()
